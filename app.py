@@ -1,3 +1,4 @@
+
 import base64
 import os
 import streamlit as st
@@ -22,7 +23,7 @@ st.set_page_config(
 # 2. Inject Black & Dark Orange Theme Styles
 inject_lpu_theme()
 
-# 3. Centered LPU Logo Loading Screen (Smooth opening animation)
+# 3. Centered LPU Logo Loading Screen
 render_centered_loading_screen()
 
 # 4. Top University Status Bar
@@ -38,22 +39,10 @@ header_brand, header_spacer, header_nav = st.columns(
     vertical_alignment="center"
 )
 
+# Brand section intentionally left empty to remove
+# SHUTTLELYZE / LPU Transit Intelligence from the top.
 with header_brand:
-    logo_html = f'<img src="{logo_url}" style="height: 44px; width: 44px; margin-right: 14px; object-fit: contain; filter: drop-shadow(0 0 10px rgba(255,106,0,0.5));" alt="LPU Logo">' if logo_url else ''
-    st.markdown(
-        f"""
-        <div style="display: flex; align-items: center; height: 65px; box-sizing: border-box; padding-left: 10px;">
-            {logo_html}
-            <div>
-                <span style="color: #FFFFFF; font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 800; letter-spacing: 1.5px; line-height: 1;">
-                    SHUTTLE<span style="color: #FF6A00;">LYZE</span>
-                </span>
-                <div style="color: #B3B3B3; font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">LPU Transit Intelligence</div>
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+    st.empty()
 
 with header_nav:
     nav1, nav2, nav3, nav4, nav5 = st.columns(
@@ -101,6 +90,7 @@ st.markdown('<div style="height: 10px;"></div>', unsafe_allow_html=True)
 
 # 6. Hero Section Showcasing LPU Campus Building
 bg_style = f"background-image: url('{campus_bg_url}');" if campus_bg_url else "background-color: #121212;"
+
 st.markdown(
     f"""
     <div class="lpu-hero-wrap">
@@ -135,6 +125,7 @@ st.markdown(
 
 # Quick Action Banner
 cta_col1, cta_col2 = st.columns(2, gap="medium")
+
 with cta_col1:
     st.markdown(
         """
@@ -148,6 +139,7 @@ with cta_col1:
         """,
         unsafe_allow_html=True
     )
+
     if st.button("🚀 Open Services & Analytics", key="btn_hero_services", use_container_width=True):
         st.switch_page("pages/Services.py")
 
@@ -164,6 +156,7 @@ with cta_col2:
         """,
         unsafe_allow_html=True
     )
+
     if st.button("🛡️ View Safety Protocols", key="btn_hero_safety", use_container_width=True):
         st.switch_page("pages/Safety.py")
 
@@ -231,13 +224,12 @@ with col_routes:
         unsafe_allow_html=True
     )
 
-
 with col_map:
     st.iframe(
         "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13715.1798369524!2d75.7001!3d31.2530!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x391a5f5e9c0c0c0d%3A0x7c7c7c7c7c7c7c7c!2sLovely%20Professional%20University!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin",
-        height=350,
-        
+        height=350
     )
+
 st.markdown('<div style="height: 35px;"></div>', unsafe_allow_html=True)
 
 # 8. LPU Shuttle FAQ & Transit Schedules
