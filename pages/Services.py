@@ -65,52 +65,110 @@ def load_location_options(path):
     ]
 
     if not path:
+        st.error(
+            "LPU_All_Locations.xlsx was not found. "
+            "Place the Excel file in your project root and push it to GitHub."
+        )
         return fallback
 
     options = []
 
+    # Possible column names in the Excel workbook
+    id_aliases = [
+        "ID",
+        "Block / Location ID",
+        "Location ID",
+        "Block ID",
+        "Block No",
+        "Block Number",
+        "Location Code",
+    ]
+
+    name_aliases = [
+        "Location Name",
+        "Name",
+        "Block Name",
+        "Building Name",
+        "Location",
+    ]
+
     try:
-        blocks = pd.read_excel(
-            path,
-            sheet_name="LPU Locations",
-        )
-        named = pd.read_excel(
-            path,
-            sheet_name="Named Locations",
-        )
+        excel_file = pd.ExcelFile(path)
 
-        if "Block / Location ID" in blocks.columns:
-            blocks = blocks.rename(
-                columns={"Block / Location ID": "ID"}
+        for sheet in excel_file.sheet_names:
+            frame = pd.read_excel(
+                excel_file,
+                sheet_name=sheet,
             )
 
-        if "Location ID" in named.columns:
-            named = named.rename(
-                columns={"Location ID": "ID"}
+            # Normalize column names
+            column_map = {
+                str(column).strip().casefold(): column
+                for column in frame.columns
+            }
+
+            id_column = next(
+                (
+                    column_map[name.casefold()]
+                    for name in id_aliases
+                    if name.casefold() in column_map
+                ),
+                None,
             )
 
-        for frame in (blocks, named):
-            if {"ID", "Location Name"}.issubset(frame.columns):
-                for _, row in frame.iterrows():
-                    loc_id = str(row["ID"]).strip()
-                    loc_name = str(row["Location Name"]).strip()
+            name_column = next(
+                (
+                    column_map[name.casefold()]
+                    for name in name_aliases
+                    if name.casefold() in column_map
+                ),
+                None,
+            )
 
-                    if (
-                        loc_id.lower() != "nan"
-                        and loc_name.lower() != "nan"
-                    ):
-                        option = f"{loc_id} — {loc_name}"
+            if id_column is None or name_column is None:
+                continue
 
-                        if option not in options:
-                            options.append(option)
+            for _, row in frame.iterrows():
+                loc_id = str(row[id_column]).strip()
+                loc_name = str(row[name_column]).strip()
 
-        return sorted(options, key=str.casefold) if options else fallback
+                if (
+                    not loc_id
+                    or not loc_name
+                    or loc_id.casefold() == "nan"
+                    or loc_name.casefold() == "nan"
+                ):
+                    continue
 
-    except Exception:
+                # Clean Excel IDs such as 34.0 into 34
+                if loc_id.endswith(".0"):
+                    loc_id = loc_id[:-2]
+
+                option = f"{loc_id} — {loc_name}"
+
+                if option not in options:
+                    options.append(option)
+
+        if options:
+            options = sorted(options, key=str.casefold)
+            return options
+
+        st.error(
+            "The Excel file was opened, but no valid location ID and "
+            "location name columns were found."
+        )
+        st.write("Available Excel sheets:", excel_file.sheet_names)
+
+        return fallback
+
+    except Exception as exc:
+        st.error(f"Could not load campus locations: {exc}")
         return fallback
 
 
 location_options = load_location_options(excel_path)
+
+st.caption(f"Loaded {len(location_options)} campus locations.")
 
 
 # ============================================================
