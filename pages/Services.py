@@ -240,18 +240,7 @@ srv_logo_url = get_lpu_logo_url()
 header_brand, header_spacer, header_nav = st.columns([3.2, 0.6, 6.2], gap="small", vertical_alignment="center")
 
 with header_brand:
-    srv_logo_html = f'<img src="{srv_logo_url}" style="height: 44px; width: 44px; margin-right: 14px; object-fit: contain; filter: drop-shadow(0 0 10px rgba(255,106,0,0.5));" alt="LPU Logo">' if srv_logo_url else ''
-    st.markdown(f'''
-    <div style="display: flex; align-items: center; height: 65px; box-sizing: border-box; padding-left: 10px;">
-        {srv_logo_html}
-        <div>
-            <span style="color: #FFFFFF; font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 800; letter-spacing: 1.5px; line-height: 1;">
-                SHUTTLE<span style="color: #FF6A00;">LYZE</span>
-            </span>
-            <div style="color: #B3B3B3; font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">Services & Predictive AI</div>
-        </div>
-    </div>
-    ''', unsafe_allow_html=True)
+    st.empty()
 
 with header_nav:
     nav1, nav2, nav3, nav4, nav5 = st.columns([1.0, 1.3, 1.3, 0.9, 0.9], gap="small", vertical_alignment="center")
