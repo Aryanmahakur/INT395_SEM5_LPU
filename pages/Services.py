@@ -1,4 +1,3 @@
-
 import os
 import base64
 import importlib.util
@@ -8,13 +7,7 @@ import joblib
 import pandas as pd
 import streamlit as st
 import streamlit.components.v1 as components
-
-from assets.frontend_theme import (
-    inject_lpu_theme,
-    render_top_banner,
-    render_cinematic_footer,
-    get_lpu_campus_url,
-)
+from assets.frontend_theme import inject_lpu_theme, render_top_banner, render_cinematic_footer, get_lpu_logo_url, get_lpu_campus_url
 
 
 # ============================================================
@@ -158,11 +151,7 @@ def load_backend_artifacts():
         os.path.join(PROJECT_ROOT, "lpu_travel_time_model.pkl"),
         os.path.join(os.path.dirname(__file__), "lpu_travel_time_model.pkl"),
         os.path.expanduser("~/Downloads/lpu_travel_time_model.pkl"),
-        os.path.join(
-            os.path.dirname(__file__),
-            "INT395-CA1-PROJECT",
-            "lpu_travel_time_model.pkl",
-        ),
+        os.path.join(os.path.dirname(__file__), "INT395-CA1-PROJECT", "lpu_travel_time_model.pkl"),
     )
 
     pipeline = None
@@ -246,51 +235,45 @@ st.markdown('''
 </style>
 ''', unsafe_allow_html=True)
 
-
-# ============================================================
-# 5. FLOATING HEADER NAVIGATION
-# Top branding removed; navigation preserved.
-# ============================================================
-header_brand, header_spacer, header_nav = st.columns(
-    [3.2, 0.6, 6.2],
-    gap="small",
-    vertical_alignment="center",
-)
+# Floating Header Navigation
+srv_logo_url = get_lpu_logo_url()
+header_brand, header_spacer, header_nav = st.columns([3.2, 0.6, 6.2], gap="small", vertical_alignment="center")
 
 with header_brand:
-    st.empty()
+    srv_logo_html = f'<img src="{srv_logo_url}" style="height: 44px; width: 44px; margin-right: 14px; object-fit: contain; filter: drop-shadow(0 0 10px rgba(255,106,0,0.5));" alt="LPU Logo">' if srv_logo_url else ''
+    st.markdown(f'''
+    <div style="display: flex; align-items: center; height: 65px; box-sizing: border-box; padding-left: 10px;">
+        {srv_logo_html}
+        <div>
+            <span style="color: #FFFFFF; font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 800; letter-spacing: 1.5px; line-height: 1;">
+                SHUTTLE<span style="color: #FF6A00;">LYZE</span>
+            </span>
+            <div style="color: #B3B3B3; font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">Services & Predictive AI</div>
+        </div>
+    </div>
+    ''', unsafe_allow_html=True)
 
 with header_nav:
-    nav1, nav2, nav3, nav4, nav5 = st.columns(
-        [1.0, 1.3, 1.3, 0.9, 0.9],
-        gap="small",
-        vertical_alignment="center",
-    )
-
+    nav1, nav2, nav3, nav4, nav5 = st.columns([1.0, 1.3, 1.3, 0.9, 0.9], gap="small", vertical_alignment="center")
     with nav1:
         if st.button("Home", key="srv_nav_home", use_container_width=True):
             st.switch_page("app.py")
-
     with nav2:
         if st.button("Safety Hub", key="srv_nav_safety", use_container_width=True):
             if os.path.exists("pages/Safety.py"):
                 st.switch_page("pages/Safety.py")
-
     with nav3:
         if st.button("News & Alerts", key="srv_nav_news", use_container_width=True):
             if os.path.exists("pages/News.py"):
                 st.switch_page("pages/News.py")
-
     with nav4:
         if st.button("About", key="srv_nav_about", use_container_width=True):
             if os.path.exists("pages/About.py"):
                 st.switch_page("pages/About.py")
-
     with nav5:
         if st.button("Contact", key="srv_nav_contact", use_container_width=True):
             if os.path.exists("pages/Contact.py"):
                 st.switch_page("pages/Contact.py")
-
 
 st.markdown('''
 <div style="margin: 15px 0 25px 0; border-bottom: 1px solid rgba(255, 106, 0, 0.25); padding-bottom: 15px;">
@@ -304,7 +287,6 @@ st.markdown('''
 </div>
 ''', unsafe_allow_html=True)
 
-
 # ============================================================
 # 6. PICKUP AND DROP INPUTS
 # ============================================================
@@ -313,7 +295,7 @@ sel_col1, sel_col2 = st.columns(2, gap="medium")
 with sel_col1:
     st.markdown(
         "<span style='font-size:12px;font-weight:bold;color:#333;'>"
-        "📍 Select Pickup Location</span>",
+        "ðŸ“ Select Pickup Location</span>",
         unsafe_allow_html=True,
     )
 
@@ -327,7 +309,7 @@ with sel_col1:
 with sel_col2:
     st.markdown(
         "<span style='font-size:12px;font-weight:bold;color:#333;'>"
-        "🏁 Select Drop Location</span>",
+        "ðŸ Select Drop Location</span>",
         unsafe_allow_html=True,
     )
 
@@ -341,7 +323,7 @@ with sel_col2:
 st.markdown("<div style='height:8px;'></div>", unsafe_allow_html=True)
 
 run_analysis = st.button(
-    "🚀 Run Complete Shuttle & Route Analysis",
+    "ðŸš€ Run Complete Shuttle & Route Analysis",
     use_container_width=True,
 )
 
@@ -357,7 +339,7 @@ st.markdown(
                 color:#333;">
         <b>Route Overview:</b>
         <span class="route-badge">{pickup_location}</span>
-        →
+        âž”
         <span class="route-badge">{drop_location}</span>
     </div>
     """,
@@ -457,7 +439,7 @@ def make_demand_input(
         "Drop_Block": str(drop["ID"]),
         "Drop_Location_Name": str(drop["Name"]),
         "Drop_Location_Type": str(drop["Type"]),
-        "Route": f"{pickup['ID']} → {drop['ID']}",
+        "Route": f"{pickup['ID']} â†’ {drop['ID']}",
         "Day_of_Week": now.strftime("%A"),
         "Is_Weekend": "Yes" if now.weekday() >= 5 else "No",
         "Month": now.strftime("%B"),
@@ -621,7 +603,7 @@ if run_analysis:
 
     pickup_id, pickup_name = split_location(pickup_location)
     drop_id, drop_name = split_location(drop_location)
-    route_str = f"{pickup_id} → {drop_id}"
+    route_str = f"{pickup_id} â†’ {drop_id}"
 
     # Find history for the selected route. If the route has no matching
     # rows, use the actual campus dataset, as the original runner does.
@@ -647,7 +629,8 @@ if run_analysis:
         else master_df
     )
 
-    # Actual data-derived values for the runner's report.
+    # Actual data-derived values for the runner's report. No hardcoded
+    # 9.74 / 2.97 / 513.91 / 7208 / 2792 / 89.09 substitutions.
     historical_records = len(report_data) if report_data is not None else None
     avg_passengers = numeric_mean(report_data, "Passengers")
     avg_travel_time = numeric_mean(report_data, "Travel_Time_Min")
@@ -665,7 +648,9 @@ if run_analysis:
         peak_yes_count = None
         peak_no_count = None
 
-    # Determine the operational tier from actual dataset demand labels.
+    # Determine the operational tier from actual dataset demand labels when
+    # available; otherwise compare the passenger average with data-derived
+    # quartiles instead of using a fixed passenger threshold.
     traffic_tier = "Unavailable — passenger data missing"
     if report_data is not None and "Demand_Level" in report_data.columns:
         demand_labels = report_data["Demand_Level"].dropna().astype(str).str.strip()
@@ -705,7 +690,8 @@ if run_analysis:
             return "Unavailable"
         return f"{value:,.{decimals}f}{suffix}"
 
-    # Fixed values are used only as model-input defaults.
+    # Fixed values are used only as model-input defaults when no historical
+    # value exists. They are never shown as historical report results.
     model_distance = avg_distance if avg_distance is not None else 500.0
     model_travel_time = avg_travel_time if avg_travel_time is not None else 3.0
     model_traffic = traffic if traffic != "Unavailable" else "Medium"
@@ -716,6 +702,9 @@ if run_analysis:
         else "Yes"
     )
 
+    # Use an observed capacity value from the loaded dataset for model input;
+    # do not assume a fixed 30-passenger shuttle. If unavailable, let prediction
+    # fail safely and use route-specific historical demand for the recommendation.
     model_vehicle_capacity = numeric_mean(master_df, "Vehicle_Capacity")
 
     route_demand, route_demand_source = predict_route_demand(
@@ -739,6 +728,7 @@ if run_analysis:
 
     # --------------------------------------------------------
     # Route map / OSRM results
+    # THIS MAP/OSRM BLOCK IS KEPT UNCHANGED.
     # --------------------------------------------------------
     routes = []
     shortest = None
@@ -784,6 +774,7 @@ if run_analysis:
 
     # --------------------------------------------------------
     # Distance and travel-time matrices
+    # THIS MATRIX/MAP SUPPORT BLOCK IS KEPT UNCHANGED.
     # --------------------------------------------------------
     matrix_distance = None
     matrix_time = None
@@ -862,13 +853,17 @@ if run_analysis:
         )
 
     # --------------------------------------------------------
-    # DISPLAY MODEL OUTPUT, REPORT VALUES, AND MAP
+    # DISPLAY ONLY THE SAVED MODEL PREDICTION, THE 10 REPORT
+    # VALUES FROM THE RUNNER, AND THE EXISTING MAP.
     # --------------------------------------------------------
+
     analytics_col, map_col = st.columns([1.15, 1], gap="large")
 
     with analytics_col:
-        st.caption(f"{pickup_name} → {drop_name}")
+        st.caption(f"{pickup_name} â†’ {drop_name}")
 
+        # New travel-time model output. This reads the saved matrices directly;
+        # it does not train a model or use hardcoded travel results.
         matrix_distance_result, matrix_time_result, matrix_result_error = (
             get_matrix_travel_result(
                 pickup_id,
@@ -883,7 +878,6 @@ if run_analysis:
             st.warning(matrix_result_error)
         else:
             travel_result_columns = st.columns(2, gap="small")
-
             with travel_result_columns[0]:
                 st.markdown(
                     '<div class="analysis-card"><b>Pickup Location</b><br>'
@@ -896,7 +890,6 @@ if run_analysis:
                     f'{matrix_distance_result / 1000:.3f} km</div>',
                     unsafe_allow_html=True,
                 )
-
             with travel_result_columns[1]:
                 st.markdown(
                     '<div class="analysis-card"><b>Drop Location</b><br>'
@@ -908,6 +901,7 @@ if run_analysis:
                     f'{matrix_time_result:.2f} minutes</div>',
                     unsafe_allow_html=True,
                 )
+
 
         if master_df is None:
             st.error(
@@ -970,7 +964,6 @@ if run_analysis:
         ]
 
         report_columns = st.columns(2, gap="small")
-
         for index, (title, value) in enumerate(report_items):
             with report_columns[index % 2]:
                 st.markdown(
@@ -979,7 +972,10 @@ if run_analysis:
                 )
 
         # --------------------------------------------------------
-        # ROUTE-SPECIFIC HISTORICAL ANALYTICS
+        # NEW: ROUTE-SPECIFIC HISTORICAL ANALYTICS
+        # Use only records matching this pickup/drop pair. Even if there
+        # are just a few matching records, report those actual records;
+        # do not replace them with campus-wide values.
         # --------------------------------------------------------
         route_history = (
             route_data.copy()
@@ -1012,7 +1008,6 @@ if run_analysis:
                 route_offpeak_count = int(
                     route_peak_values.isin(["no", "false", "0"]).sum()
                 )
-
                 if route_peak_count > route_offpeak_count:
                     route_peak_trend = "Peak hours dominate traffic"
                 elif route_offpeak_count > route_peak_count:
@@ -1041,7 +1036,6 @@ if run_analysis:
         ]
 
         historical_route_columns = st.columns(2, gap="small")
-
         for index, (title, value) in enumerate(historical_route_items):
             with historical_route_columns[index % 2]:
                 st.markdown(
@@ -1051,13 +1045,14 @@ if run_analysis:
 
         # --------------------------------------------------------
         # RESOURCE ALLOCATION RECOMMENDATION
+        # Uses predicted demand together with this route's actual distance,
+        # travel time, location types, and historical traffic/peak patterns.
+        # Does not assume a fixed passenger capacity per shuttle.
         # --------------------------------------------------------
         recommendation_basis = None
-
         if route_demand is not None and pd.notna(route_demand):
             recommendation_basis = float(route_demand)
             recommendation_source = "Saved demand model prediction"
-
         elif route_history is not None:
             route_avg_passengers = numeric_mean(route_history, "Passengers")
             if route_avg_passengers is not None:
@@ -1070,13 +1065,10 @@ if run_analysis:
         route_time_min = travel_time_used if travel_time_used is not None else None
 
         route_factors = []
-
         if route_distance_m is not None and pd.notna(route_distance_m):
             route_factors.append(f"route distance {route_distance_m:,.0f} m")
-
         if route_time_min is not None and pd.notna(route_time_min):
             route_factors.append(f"estimated travel time {route_time_min:.2f} min")
-
         route_factors.append(f"pickup: {pickup_name} ({pickup_type})")
         route_factors.append(f"drop: {drop_name} ({drop_type})")
 
@@ -1087,20 +1079,16 @@ if run_analysis:
                 "Use the route distance, travel time, and live passenger queue to plan dispatch."
             )
         else:
+            # Compare demand with route history where available rather than
+            # translating passenger count into an assumed vehicle capacity.
             route_avg_passengers = (
                 numeric_mean(route_history, "Passengers")
                 if route_history is not None else None
             )
             campus_avg_passengers = numeric_mean(master_df, "Passengers")
-            comparison_value = (
-                route_avg_passengers
-                if route_avg_passengers is not None
-                else campus_avg_passengers
-            )
-
+            comparison_value = route_avg_passengers if route_avg_passengers is not None else campus_avg_passengers
             if comparison_value is not None and comparison_value > 0:
                 demand_ratio = recommendation_basis / comparison_value
-
                 if demand_ratio >= 1.25:
                     demand_advice = (
                         "Demand is notably above the available historical baseline. "
@@ -1118,19 +1106,16 @@ if run_analysis:
                         "Demand is close to the available historical baseline. Maintain the "
                         "current service pattern and adjust dispatch frequency using live queues."
                     )
-
             elif recommendation_basis >= 20:
                 demand_advice = (
                     "The predicted passenger demand is relatively high. Prioritize availability "
                     "during the predicted period and review queues before adding trips."
                 )
-
             elif recommendation_basis <= 10:
                 demand_advice = (
                     "The predicted passenger demand is relatively low. Keep current service "
                     "initially and consider a lower frequency only if live counts support it."
                 )
-
             else:
                 demand_advice = (
                     "The predicted passenger demand is moderate. Maintain current service and "
@@ -1183,6 +1168,7 @@ if run_analysis:
 
     # ========================================================
     # 11. ROUTE MAP
+    # MAP DISPLAY CODE IS KEPT UNCHANGED.
     # ========================================================
     with map_col:
 
@@ -1194,7 +1180,7 @@ if run_analysis:
             )
 
             st.download_button(
-                "📥 Download Route Map (HTML)",
+                "ðŸ“¥ Download Route Map (HTML)",
                 data=route_map_html,
                 file_name="lpu_route_map.html",
                 mime="text/html",
@@ -1205,7 +1191,7 @@ if run_analysis:
                 st.markdown(
                     '<div class="analysis-card">'
                     '<b>Shortest route</b><br>'
-                    f'{shortest["distance"] / 1000:.3f} km · '
+                    f'{shortest["distance"] / 1000:.3f} km Â· '
                     f'{shortest["duration"] / 60:.2f} minutes'
                     '</div>',
                     unsafe_allow_html=True,
@@ -1215,7 +1201,7 @@ if run_analysis:
                 st.markdown(
                     '<div class="analysis-card">'
                     '<b>Fastest route</b><br>'
-                    f'{fastest["distance"] / 1000:.3f} km · '
+                    f'{fastest["distance"] / 1000:.3f} km Â· '
                     f'{fastest["duration"] / 60:.2f} minutes'
                     '</div>',
                     unsafe_allow_html=True,
@@ -1233,11 +1219,11 @@ if run_analysis:
                 "location IDs, and internet access."
             )
 
-
 st.markdown(
     "<div style='height:35px;'></div>",
     unsafe_allow_html=True,
 )
+
 
 
 # ============================================================
@@ -1246,21 +1232,18 @@ st.markdown(
 # Uses the saved model directly; no baseline or manual demand adjustment.
 # ============================================================
 st.markdown("<div style='height:12px;'></div>", unsafe_allow_html=True)
-
 st.markdown(
     '<div class="services-header">'
     '<h1 class="services-title">What-If Demand Simulation</h1>'
     '</div>',
     unsafe_allow_html=True,
 )
-
 st.caption(
     "Choose a campus location and operating conditions to estimate passenger demand. "
     "The saved model is used directly; no baseline comparison or assumed shuttle capacity is shown."
 )
 
 whatif_col1, whatif_col2, whatif_col3, whatif_col4 = st.columns(4, gap="medium")
-
 with whatif_col1:
     whatif_location = st.selectbox(
         "Campus location",
@@ -1268,7 +1251,6 @@ with whatif_col1:
         index=location_options.index(pickup_location) if pickup_location in location_options else 0,
         key="whatif_location_single",
     )
-
 with whatif_col2:
     whatif_traffic = st.selectbox(
         "Traffic condition",
@@ -1276,7 +1258,6 @@ with whatif_col2:
         index=1,
         key="whatif_traffic_single",
     )
-
 with whatif_col3:
     whatif_weather = st.selectbox(
         "Weather condition",
@@ -1284,7 +1265,6 @@ with whatif_col3:
         index=0,
         key="whatif_weather_single",
     )
-
 with whatif_col4:
     whatif_peak = st.selectbox(
         "Peak hour",
@@ -1292,7 +1272,6 @@ with whatif_col4:
         index=1,
         key="whatif_peak_single",
     )
-
 
 whatif_location_id, whatif_location_name = split_location(whatif_location)
 whatif_drop_id, whatif_drop_name = split_location(drop_location)
@@ -1304,17 +1283,14 @@ whatif_drop_id, whatif_drop_name = split_location(drop_location)
 whatif_origin_type = infer_location_type(
     whatif_location_id, "pickup", default="Academic"
 )
-
 whatif_destination_type = infer_location_type(
     whatif_drop_id, "drop", default="Academic"
 )
-
 whatif_origin = {
     "ID": whatif_location_id,
     "Name": whatif_location_name,
     "Type": whatif_origin_type,
 }
-
 whatif_destination = {
     "ID": whatif_drop_id,
     "Name": whatif_drop_name,
@@ -1331,7 +1307,6 @@ whatif_distance, whatif_time, whatif_matrix_error = get_matrix_travel_result(
 
 # Use matching historical route values only if the saved matrix has no match.
 whatif_matching_history = None
-
 if master_df is not None and {"Pickup_Block", "Drop_Block"}.issubset(master_df.columns):
     whatif_matching_history = master_df[
         (master_df["Pickup_Block"].astype(str).str.strip() == str(whatif_location_id).strip())
@@ -1340,10 +1315,8 @@ if master_df is not None and {"Pickup_Block", "Drop_Block"}.issubset(master_df.c
 
 if whatif_distance is None and whatif_matching_history is not None and not whatif_matching_history.empty:
     whatif_distance = numeric_mean(whatif_matching_history, "Distance_m")
-
 if whatif_time is None and whatif_matching_history is not None and not whatif_matching_history.empty:
     whatif_time = numeric_mean(whatif_matching_history, "Travel_Time_Min")
-
 
 if whatif_distance is None or whatif_time is None:
     st.warning(
@@ -1351,10 +1324,8 @@ if whatif_distance is None or whatif_time is None:
         "Choose another campus location or update the saved route matrix; a demand prediction "
         "is not generated using invented route values."
     )
-
 else:
     whatif_vehicle_capacity = numeric_mean(master_df, "Vehicle_Capacity")
-
     whatif_demand, whatif_demand_source = predict_route_demand(
         whatif_origin,
         whatif_destination,
@@ -1373,7 +1344,6 @@ else:
             "features match the input pipeline."
         )
         st.caption(f"Model status: {whatif_demand_source}")
-
     else:
         # Rule-based demand level from weather and operating conditions:
         # Rainy or Stormy weather always means High demand, regardless of other inputs.
@@ -1388,21 +1358,18 @@ else:
                 "Rainy or stormy weather is selected, so demand is classified as High regardless "
                 "of traffic or peak-hour settings. Prepare for disruption and review shuttle capacity."
             )
-
         elif is_peak_hour and is_high_traffic:
             whatif_level = "High"
             whatif_advice = (
                 "Peak hour and high traffic are both present. Expect the highest demand pressure; "
                 "monitor queues and consider allocating additional shuttle capacity."
             )
-
         elif is_peak_hour or is_high_traffic:
             whatif_level = "Medium"
             whatif_advice = (
                 "Either peak hour or high traffic is present. Monitor passenger queues and "
                 "adjust shuttle allocation if demand increases."
             )
-
         else:
             whatif_level = "Low"
             whatif_advice = (
@@ -1411,25 +1378,22 @@ else:
             )
 
         result_cols = st.columns(2, gap="medium")
-
         with result_cols[0]:
             st.metric("Estimated demand level", whatif_level)
-
         with result_cols[1]:
             st.metric("Estimated travel time", f"{float(whatif_time):.2f} min")
 
         st.markdown(
             '<div class="analysis-card"><b>Scenario result</b><br>'
             f'<b>Location:</b> {whatif_location_name}<br>'
-            f'<b>Route used by model:</b> {whatif_location_name} → {whatif_drop_name}<br>'
+            f'<b>Route used by model:</b> {whatif_location_name} â†’ {whatif_drop_name}<br>'
             f'<b>Distance:</b> {float(whatif_distance):,.2f} m<br>'
-            f'<b>Conditions:</b> Traffic {whatif_traffic} · Weather {whatif_weather} · '
+            f'<b>Conditions:</b> Traffic {whatif_traffic} Â· Weather {whatif_weather} Â· '
             f'Peak hour {whatif_peak}<br>'
             f'<b>Planning insight:</b> {whatif_advice}'
             '</div>',
             unsafe_allow_html=True,
         )
-
         st.caption(
             "This is a model estimate, not a live passenger count. The saved model uses route-level "
             "features, so the selected location is evaluated as the pickup and the page's current "
@@ -1437,11 +1401,9 @@ else:
             "selected weather, peak-hour, and traffic conditions."
         )
 
-
 st.markdown("<div style='height:25px;'></div>", unsafe_allow_html=True)
 
 
-# ============================================================
-# 13. FOOTER
-# ============================================================
+
+
 render_cinematic_footer()
