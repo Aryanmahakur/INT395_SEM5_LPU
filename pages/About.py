@@ -1,3 +1,4 @@
+
 import os
 import streamlit as st
 from assets.frontend_theme import (
@@ -132,51 +133,62 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # 3. Floating Header Navigation Bar
-abt_logo_url = get_lpu_logo_url()
-header_brand, header_spacer, header_nav = st.columns([3.2, 0.6, 6.2], gap="small", vertical_alignment="center")
+header_brand, header_spacer, header_nav = st.columns(
+    [3.2, 0.6, 6.2],
+    gap="small",
+    vertical_alignment="center"
+)
 
+# Brand removed from this page
 with header_brand:
-    abt_logo_html = f'<img src="{abt_logo_url}" style="height: 44px; width: 44px; margin-right: 14px; object-fit: contain; filter: drop-shadow(0 0 10px rgba(255,106,0,0.5));" alt="LPU Logo">' if abt_logo_url else ''
-    st.markdown(f'''
-    <div style="display: flex; align-items: center; height: 65px; box-sizing: border-box; padding-left: 10px;">
-        {abt_logo_html}
-        <div>
-            <span style="color: #FFFFFF; font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 800; letter-spacing: 1.5px; line-height: 1;">
-                SHUTTLE<span style="color: #FF6A00;">LYZE</span>
-            </span>
-            <div style="color: #B3B3B3; font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">System Architecture & ML Specs</div>
-        </div>
-    </div>
-    ''', unsafe_allow_html=True)
+    st.empty()
 
 with header_nav:
-    nav1, nav2, nav3, nav4, nav5 = st.columns([1.0, 1.3, 1.3, 0.9, 0.9], gap="small", vertical_alignment="center")
+    nav1, nav2, nav3, nav4, nav5 = st.columns(
+        [1.0, 1.3, 1.3, 0.9, 0.9],
+        gap="small",
+        vertical_alignment="center"
+    )
+
     with nav1:
         if st.button("Home", key="abt_nav_home", use_container_width=True):
             st.switch_page("app.py")
+
     with nav2:
         if st.button("Services", key="abt_nav_services", use_container_width=True):
             if os.path.exists("pages/Services.py"):
                 st.switch_page("pages/Services.py")
+
     with nav3:
         if st.button("Safety Hub", key="abt_nav_safety", use_container_width=True):
             if os.path.exists("pages/Safety.py"):
                 st.switch_page("pages/Safety.py")
+
     with nav4:
         if st.button("News & Alerts", key="abt_nav_news", use_container_width=True):
             if os.path.exists("pages/News.py"):
                 st.switch_page("pages/News.py")
+
     with nav5:
         if st.button("Contact", key="abt_nav_contact", use_container_width=True):
             if os.path.exists("pages/Contact.py"):
                 st.switch_page("pages/Contact.py")
 
+
 # 4. Helper Functions
 def section(title):
-    st.markdown(f'<div class="section-heading">{title}</div>', unsafe_allow_html=True)
+    st.markdown(
+        f'<div class="section-heading">{title}</div>',
+        unsafe_allow_html=True
+    )
+
 
 def info_card(title, body):
-    st.markdown(f'<div class="info-card"><h3>{title}</h3><p>{body}</p></div>', unsafe_allow_html=True)
+    st.markdown(
+        f'<div class="info-card"><h3>{title}</h3><p>{body}</p></div>',
+        unsafe_allow_html=True
+    )
+
 
 # 5. Project Hero Container
 st.markdown('''
@@ -191,8 +203,8 @@ st.markdown('''
 </div>
 ''', unsafe_allow_html=True)
 
-# # 7. PROJECT OVERVIEW
-# ============================================================
+
+# 7. PROJECT OVERVIEW
 section("Project Overview")
 
 overview = [
@@ -222,9 +234,8 @@ for col, (title, body) in zip(cols, overview):
     with col:
         info_card(title, body)
 
-# ============================================================
+
 # 8. TECHNOLOGIES USED
-# ============================================================
 section("Technologies & Tools")
 
 st.markdown(
@@ -281,9 +292,8 @@ for start in range(0, len(tech_info), 2):
         with col:
             info_card(title, body)
 
-# ============================================================
+
 # 9. MODELS & ANALYTICAL COMPONENTS
-# ============================================================
 section("Models & Analytical Components")
 
 model_info = [
@@ -331,9 +341,8 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# ============================================================
+
 # 10. DEMAND MODEL VALIDATION
-# ============================================================
 section("Demand Prediction Model Validation")
 
 st.write(
@@ -374,9 +383,8 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# ============================================================
+
 # 11. CAMPUS LOCATION CLUSTERING
-# ============================================================
 section("Campus Location Clustering")
 
 st.write(
@@ -397,9 +405,8 @@ else:
         "'lpu_location_clusters_plot.png' in the project root."
     )
 
-# ============================================================
+
 # 12. CAMPUS DEMAND HEATMAP
-# ============================================================
 section("Campus Demand Heatmap")
 
 st.write(
@@ -420,9 +427,8 @@ else:
         "in the project root."
     )
 
-# ============================================================
+
 # 13. PROJECT WORKFLOW
-# ============================================================
 section("Project Workflow")
 
 workflow = [
@@ -477,10 +483,8 @@ for number, title, description in workflow:
         unsafe_allow_html=True,
     )
 
-# ============================================================
-# 14. END OF ABOUT PAGE — NO FOOTER
-# ============================================================
-st.write("")
 
+# 14. END OF ABOUT PAGE
+st.write("")
 
 render_cinematic_footer()

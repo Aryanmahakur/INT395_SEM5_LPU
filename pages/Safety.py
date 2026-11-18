@@ -1,12 +1,11 @@
+
 import os
 import streamlit as st
-import streamlit.components.v1 as components
 
 from assets.frontend_theme import (
     inject_lpu_theme,
     render_top_banner,
     render_cinematic_footer,
-    get_lpu_logo_url,
 )
 
 # 1. Page Configuration
@@ -21,40 +20,42 @@ inject_lpu_theme()
 render_top_banner()
 
 # 3. Floating Header Navigation Bar
-logo_url = get_lpu_logo_url()
-header_brand, header_spacer, header_nav = st.columns([3.2, 0.6, 6.2], gap="small", vertical_alignment="center")
+header_brand, header_spacer, header_nav = st.columns(
+    [3.2, 0.6, 6.2],
+    gap="small",
+    vertical_alignment="center"
+)
 
+# Top ShuttleLyze branding removed
 with header_brand:
-    logo_html = f'<img src="{logo_url}" style="height: 44px; width: 44px; margin-right: 14px; object-fit: contain; filter: drop-shadow(0 0 10px rgba(255,106,0,0.5));" alt="LPU Logo">' if logo_url else ''
-    st.markdown(f'''
-    <div style="display: flex; align-items: center; height: 65px; box-sizing: border-box; padding-left: 10px;">
-        {logo_html}
-        <div>
-            <span style="color: #FFFFFF; font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 800; letter-spacing: 1.5px; line-height: 1;">
-                SHUTTLE<span style="color: #FF6A00;">LYZE</span>
-            </span>
-            <div style="color: #B3B3B3; font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">Campus Safety & Security</div>
-        </div>
-    </div>
-    ''', unsafe_allow_html=True)
+    st.empty()
 
 with header_nav:
-    nav1, nav2, nav3, nav4, nav5 = st.columns([1.0, 1.3, 1.3, 0.9, 0.9], gap="small", vertical_alignment="center")
+    nav1, nav2, nav3, nav4, nav5 = st.columns(
+        [1.0, 1.3, 1.3, 0.9, 0.9],
+        gap="small",
+        vertical_alignment="center"
+    )
+
     with nav1:
         if st.button("Home", key="safe_nav_home", use_container_width=True):
             st.switch_page("app.py")
+
     with nav2:
         if st.button("Services", key="safe_nav_services", use_container_width=True):
             if os.path.exists("pages/Services.py"):
                 st.switch_page("pages/Services.py")
+
     with nav3:
         if st.button("News & Alerts", key="safe_nav_news", use_container_width=True):
             if os.path.exists("pages/News.py"):
                 st.switch_page("pages/News.py")
+
     with nav4:
         if st.button("About", key="safe_nav_about", use_container_width=True):
             if os.path.exists("pages/About.py"):
                 st.switch_page("pages/About.py")
+
     with nav5:
         if st.button("Contact", key="safe_nav_contact", use_container_width=True):
             if os.path.exists("pages/Contact.py"):
@@ -78,6 +79,7 @@ st.markdown(
 
 # 5. Emergency SOS Fast Cards
 sos1, sos2, sos3 = st.columns(3, gap="medium")
+
 with sos1:
     st.markdown(
         """
@@ -89,6 +91,7 @@ with sos1:
         """,
         unsafe_allow_html=True
     )
+
 with sos2:
     st.markdown(
         """
@@ -100,6 +103,7 @@ with sos2:
         """,
         unsafe_allow_html=True
     )
+
 with sos3:
     st.markdown(
         """
