@@ -1,7 +1,6 @@
 import base64
 import os
 import streamlit as st
-import streamlit.components.v1 as components
 
 # Import shared LPU Black & Dark Orange Theme
 from assets.frontend_theme import (
@@ -232,16 +231,13 @@ with col_routes:
         unsafe_allow_html=True
     )
 
-with col_map:
-    components.html(
-        """
-        <div style="border: 1px solid rgba(255, 106, 0, 0.4); border-radius: 14px; overflow: hidden; box-shadow: 0 10px 35px rgba(0,0,0,0.7); background: #121212;">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13715.1798369524!2d75.7001!3d31.2530!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x391a5f5e9c0c0c0d%3A0x7c7c7c7c7c7c7c7c!2sLovely%20Professional%20University!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin" width="100%" height="340" style="border:0; display: block; filter: invert(90%) hue-rotate(180deg) contrast(110%);" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
-        </div>
-        """,
-        height=350,
-    )
 
+with col_map:
+    st.iframe(
+        "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13715.1798369524!2d75.7001!3d31.2530!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x391a5f5e9c0c0c0d%3A0x7c7c7c7c7c7c7c7c!2sLovely%20Professional%20University!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin",
+        height=350,
+        scrolling=False
+    )
 st.markdown('<div style="height: 35px;"></div>', unsafe_allow_html=True)
 
 # 8. LPU Shuttle FAQ & Transit Schedules
