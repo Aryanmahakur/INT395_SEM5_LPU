@@ -7,12 +7,11 @@ import pandas as pd
 def load_model_and_data():
     """Loads the trained ML pipeline and master dataset."""
     model_file = "demand_prediction_pipeline.pkl"
+    if not os.path.exists(model_file):
+        model_file = os.path.join(os.path.dirname(__file__), "demand_prediction_pipeline.pkl")
     data_file = "LPU_Transportation_Master_Dataset_10000.xlsx"
     if not os.path.exists(data_file):
-        data_file = (
-            r"C:\Users\ARYAN MAHAKUR\Downloads\LPU_Transportation_Master_Dataset_10000"
-            " (1).xlsx"
-        )
+        data_file = os.path.join(os.path.dirname(__file__), "LPU_Transportation_Master_Dataset_10000.xlsx")
 
     try:
         pipeline = joblib.load(model_file)
@@ -274,3 +273,4 @@ def run_what_if_simulation():
 
 if __name__ == "__main__":
     run_what_if_simulation()
+
