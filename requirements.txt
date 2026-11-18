@@ -6,3 +6,5 @@ numpy
 joblib
 scikit-learn
 openpyxl
+folium
+streamlit-folium
